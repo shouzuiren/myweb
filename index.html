@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>时光暗号 · 代码查询系统</title>
+    <title>SplitKey · 分持密钥验证系统</title>
     <style>
         * {
             margin: 0;
@@ -139,17 +139,6 @@
             padding-top: 20px;
         }
 
-        .badge {
-            display: inline-block;
-            background: #eef2f8;
-            border-radius: 32px;
-            padding: 4px 10px;
-            font-size: 0.7rem;
-            margin-right: 6px;
-            margin-top: 6px;
-            color: #2c6280;
-        }
-
         .info-icon {
             margin-top: 16px;
             font-size: 0.75rem;
@@ -161,33 +150,34 @@
 <body>
 <div class="container">
     <div class="card">
-        <h1>⏳ 时光暗号</h1>
-        <div class="sub">输入代码 · 解锁预定时刻</div>
+        <h1>🔑 SplitKey</h1>
+        <div class="sub">分持密钥验证系统 · 代码解锁预设信息</div>
 
         <div class="input-group">
-            <label>📌 代码 / 暗号</label>
+            <label>📌 代码 / 密钥片段</label>
             <input type="text" id="codeInput" placeholder="例如: abcde" autocomplete="off" autofocus>
         </div>
 
-        <button id="queryBtn">✨ 查询时间</button>
+        <button id="queryBtn">🔓 验证并解锁</button>
 
         <div class="result-card" id="resultCard">
-            <div class="result-label">🔓 查询结果</div>
-            <div class="result-content" id="resultText">输入代码后显示对应信息</div>
+            <div class="result-label">📋 验证结果</div>
+            <div class="result-content" id="resultText">输入代码后显示预设信息</div>
         </div>
 
         <div class="info-icon">
-            ⚡ 每个代码对应唯一的预设时刻
+            ⚡ 每个代码对应唯一的预设信息 · 需配合二维码映射表使用
         </div>
         <div class="footer-note">
-            📱 扫码即用 · 数据永久保存
+            SplitKey · 物理分持密钥验证协议
         </div>
     </div>
 </div>
 
 <script>
     // ============================================================
-    // 🔐 在这里修改你的代码与对应信息（核心数据）
+    // 🔐 SplitKey 核心数据：代码 → 预设信息
+    // 可存储：时间、坐标、密码、指令、文件密钥等任意信息
     // ============================================================
     const CODE_MAP = {
         "abcde": "2026年05月20日 23:02",
@@ -195,16 +185,14 @@
         "love2026": "2026年06月01日 00:00",
         "secret": "2049年10月01日 12:00",
         "mof2026": "2026年07月15日 14:30"
-        // 👆 继续添加任意多组: "代码": "对应信息"
+        // 👆 继续添加任意多组: "代码": "预设信息"
     };
     // ============================================================
 
-    // 获取DOM元素
     const inputEl = document.getElementById('codeInput');
     const btnEl = document.getElementById('queryBtn');
     const resultTextEl = document.getElementById('resultText');
 
-    // 查询函数
     function performQuery() {
         const code = inputEl.value.trim();
         if (code === "") {
@@ -214,13 +202,12 @@
 
         const message = CODE_MAP[code];
         if (message) {
-            resultTextEl.innerHTML = `🔑 代码「${escapeHtml(code)}」<br>⏰ 对应信息：${escapeHtml(message)}`;
+            resultTextEl.innerHTML = `🔑 代码「${escapeHtml(code)}」<br>📦 预设信息：${escapeHtml(message)}`;
         } else {
             resultTextEl.innerHTML = `❌ 未找到代码「${escapeHtml(code)}」<br><span style="font-size:0.8rem; opacity:0.7;">请确认代码是否正确</span>`;
         }
     }
 
-    // 防止XSS
     function escapeHtml(str) {
         if (!str) return "";
         return str.replace(/[&<>]/g, function(m) {
@@ -231,7 +218,6 @@
         });
     }
 
-    // 绑定事件
     btnEl.addEventListener('click', performQuery);
     inputEl.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') performQuery();
